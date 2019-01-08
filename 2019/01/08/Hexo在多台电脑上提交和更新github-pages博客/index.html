@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Hexo在多台电脑上提交和更新github pages博客 | Tdwei163&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="tdwei163,tdwei163's Blog">
+  
+  <meta name="description" content="转自https://www.jianshu.com/p/0b1fccce74e0 最初是在实验室里建立了自己的博客，然后有时候回到寝室里想提交博客，于是在网上搜了很多帖子总结出这个方法。 主要的思路是 利用git分支实现 hexo生成的静态博客文件默认放在master分支上。hexo的源文件（部署环境文件）可以都放在hexo分支上（可以新创建一个hexo分支），换新电脑时，直接git clone">
+<meta name="keywords" content="hexo,更新blog,git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo在多台电脑上提交和更新github pages博客">
+<meta property="og:url" content="https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/index.html">
+<meta property="og:site_name" content="Tdwei163&#39;s Blog">
+<meta property="og:description" content="转自https://www.jianshu.com/p/0b1fccce74e0 最初是在实验室里建立了自己的博客，然后有时候回到寝室里想提交博客，于是在网上搜了很多帖子总结出这个方法。 主要的思路是 利用git分支实现 hexo生成的静态博客文件默认放在master分支上。hexo的源文件（部署环境文件）可以都放在hexo分支上（可以新创建一个hexo分支），换新电脑时，直接git clone">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/1.jpg">
+<meta property="og:image" content="https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/2.jpg">
+<meta property="og:image" content="https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/3.jpg">
+<meta property="og:image" content="https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/4.jpg">
+<meta property="og:image" content="https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/5.jpg">
+<meta property="og:image" content="https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/6.jpg">
+<meta property="og:image" content="https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/7.jpg">
+<meta property="og:image" content="https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/8.jpg">
+<meta property="og:image" content="https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/9.jpg">
+<meta property="og:image" content="https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/10.jpg">
+<meta property="og:image" content="https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/11.jpg">
+<meta property="og:updated_time" content="2019-01-08T08:46:07.013Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo在多台电脑上提交和更新github pages博客">
+<meta name="twitter:description" content="转自https://www.jianshu.com/p/0b1fccce74e0 最初是在实验室里建立了自己的博客，然后有时候回到寝室里想提交博客，于是在网上搜了很多帖子总结出这个方法。 主要的思路是 利用git分支实现 hexo生成的静态博客文件默认放在master分支上。hexo的源文件（部署环境文件）可以都放在hexo分支上（可以新创建一个hexo分支），换新电脑时，直接git clone">
+<meta name="twitter:image" content="https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/1.jpg">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">tdwei163&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        tdwei163&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                    <h3>
+                        一个专注 数据库 的技术博客
+                    </h3>
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="tdwei163" target="_blank" href="//tdwei163.com">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/tdwei163">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                        <a title="Weibo" target="_blank" href="//weibo.com/tdwei163">
+                            <i class="fa fa-weibo fa-2x"></i></a>
+                    
+                        <a title="Twitter" target="_blank" href="//twitter.com/tdwei163">
+                            <i class="fa fa-twitter fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-Hexo在多台电脑上提交和更新github-pages博客" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      Hexo在多台电脑上提交和更新github pages博客
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/Hexo/">Hexo</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-01-08
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <p>转自<a href="https://www.jianshu.com/p/0b1fccce74e0" target="_blank" rel="noopener">https://www.jianshu.com/p/0b1fccce74e0</a></p>
+<p>最初是在实验室里建立了自己的博客，然后有时候回到寝室里想提交博客，于是在网上搜了很多帖子总结出这个方法。</p>
+<p>主要的思路是 利用git分支实现</p>
+<p>hexo生成的静态博客文件默认放在master分支上。<br>hexo的源文件（部署环境文件）可以都放在hexo分支上（可以新创建一个hexo分支），换新电脑时，直接git clone hexo分支（<a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:Michaeljian/Michaeljian.github.io.git）即可。</p>
+<p>一、hexo搭建博客原理<br>hexo博客的部署环境目录：</p>
+<p><img src="/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/1.jpg" alt="image.png"></p>
+<p>hexo博客的目录结构解析：</p>
+<p><img src="/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/2.jpg" alt="image.png"></p>
+<p>上传到github上的文件：</p>
+<p><img src="/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/3.jpg" alt="image.png"></p>
+<p>1.hexo帮助把博客发送到github，同时把md文件转换成网页文件。<br>2.hexo目录下的文件和github上的文件是不同的，public文件夹的文件通过hexo d 上传到github去了，其他的文件则留在本地目录下。<br>二、实验室PC上的操作<br>1.准备工作<br>首先确保自己已经使用hexo在github搭建好了自己的个人博客，github仓库中如下图显示：<br><img src="/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/4.jpg" alt="image.png"></p>
+<p>2.对username.github.io仓库新建hexo分支，并克隆<br>在Github的username.github.io仓库上新建一个xxx分支，并切换到该分支，并在该仓库-&gt;Settings-&gt;Branches-&gt;Default branch中将默认分支设为xxx，save保存；然后将该仓库克隆到本地，进入该username.github.io文件目录。</p>
+<p><img src="/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/5.jpg" alt="image.png"></p>
+<p><img src="/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/6.jpg" alt="image.png"></p>
+<p>完成上面步骤后，在当前目录使用Git Bash执行git branch命令查看当前所在分支，应为新建的分支xxx：<br>$ git branch<br>*hexo</p>
+<p><img src="/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/7.jpg" alt="image.png"></p>
+<p>3.将本地博客的部署文件拷贝进username.github.io文件目录<br>如题，先将本地博客的部署文件（Hexo目录下的全部文件）全部拷贝进username.github.io文件目录中去。<br>接下来，进入username.github.io文件目录下，将该目录下的全部文件提交到xxx分支，提交之前需注意：</p>
+<p>将themes目录以内中的主题的.git目录删除（如果有），因为一个git仓库中不能包含另一个git仓库，提交主题文件夹会失败。<br>可能有人会问，删除了themes目录中的.git不就不能git pull更新主题了吗，很简单，需要更新主题时在另一个地方git clone下来该主题的最新版本，然后将内容拷到当前主题目录即可</p>
+<p>4.提交hexo分支<br>执行git add .、git commit -m ‘back up hexo files’（引号内容可改）、git push即可将博客的hexo部署环境提交到GitHub个人仓库的xxx分支。<br>现在可以在GitHub上的username.github.io仓库看到两个分支的差异了。</p>
+<p><img src="/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/8.jpg" alt="image.png"></p>
+<p><img src="/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/9.jpg" alt="image.png"></p>
+<p>master分支和xxx分支各自保存着一个版本，master分支用于保存博客静态资源，提供博客页面供人访问；xxx分支用于备份博客部署文件，供自己维护更新，两者在一个GitHub仓库内互不冲突，完美！<br>三、宿舍自己的电脑<br>至此，你的博客已经可以在其他电脑上进行同步的维护和更新了，方法很简单：</p>
+<p>将新电脑的生成的ssh key添加到GitHub账户上<br>在新电脑上克隆username.github.io仓库的xxx分支到本地，此时本地git仓库处于xxx分支<br>切换到username.github.io目录，执行npm install(由于仓库有一个.gitignore文件，里面默认是忽略掉  node_modules文件夹的，也就是说仓库的hexo分支并没有存储该目录[也不需要]，所以需要install下)</p>
+<p><img src="/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/10.jpg" alt="image.png"></p>
+<p>到这里了就可以开始在自己的电脑上写博客了！</p>
+<p>编辑、撰写文章或其他博客更新改动<br>依次执行git add .、git commit -m ‘back up hexo files’（引号内容可改）、git push指令，保证xxx分支版本最新<br>执行hexo d -g指令（在此之前，有时可能需要执行hexo clean），完成后就会发现，最新改动已经更新到master分支了，两个分支互不干扰！</p>
+<p>四、回到实验室PC更新并提交博客</p>
+<p><strong> 注意： 每次换电脑进行博客更新时，不管上次在其他电脑有没有更新，最好先git pull</strong></p>
+<p><img src="/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/11.jpg" alt="image.png"></p>
+<p>按照之前的方法写自己博客，<br>然后将目录切换下username.github.io下，此时需要安装一下npm install，<br>最后执行hexo g、hexo s、hexo d等命令即可提交成功<br>参考资料：<br>Erick<br>[theqwang’blog]</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年01月08日 16:46</p>
+        <p>原始链接： <a class="post-url" href="/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/" title="Hexo在多台电脑上提交和更新github pages博客">https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/</a></p>
+        <footer>
+            <a href="https://tdwei163.github.io">
+                <img src="/images/logo.png" alt="tdwei">
+                tdwei
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/&title=《Hexo在多台电脑上提交和更新github pages博客》 — Tdwei163's Blog&pic=/images/hexo.jpg" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/&title=《Hexo在多台电脑上提交和更新github pages博客》 — Tdwei163's Blog&source=" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hexo在多台电脑上提交和更新github pages博客》 — Tdwei163's Blog&url=https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/&via=https://tdwei163.github.io" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://tdwei163.github.io/2019/01/08/Hexo在多台电脑上提交和更新github-pages博客/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/hexo/" class="color5">hexo</a>
+      
+    <a href="/tags/更新blog/" class="color2">更新blog</a>
+      
+    <a href="/tags/git/" class="color4">git</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+
+<nav id="article-nav">
+  
+  
+    <a href="/2019/01/07/我的测试文章/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">我的测试文章</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 tdwei<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "https://tdwei163.github.io",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 0
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/Hexo/">Hexo</a><a class="category-link" href="/categories/随笔/">随笔</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/Test/" style="font-size: 10px;">Test</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/更新blog/" style="font-size: 10px;">更新blog</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/Test/" style="font-size: 10px;">Test</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/更新blog/" style="font-size: 10px;">更新blog</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>
